@@ -11,7 +11,10 @@ server_socket.bind((HOST, PORT))
 print("Servidor iniciado.")
 
 while True:
-    msg, client = server_socket.recvfrom(2048)
-    print("Mensagem recebida de " + str(client) + " : " + msg)
+    # recebendo a mensagem em bytes
+    msg_bytes, client = server_socket.recvfrom(2048)
+    # convertendo os bytes para string
+    msg = msg_bytes.decode()
+    print("Mensagem recebida de " + str(client) + ": " + msg)
 
 server_socket.close()
