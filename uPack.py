@@ -19,3 +19,5 @@ class uPack:
         msg += "}"
         
         return msg
+    def setId_req(self, id_rec):
+        self.id_seq = id_rec
