@@ -27,6 +27,7 @@ PORT = 4000
 
 # criando o socket para o cliente
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+client_socket.bind((HOST, 3000))
 # endereço do servidor
 servidor = (HOST, PORT)
 
