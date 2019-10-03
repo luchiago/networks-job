@@ -16,6 +16,6 @@ while True:
     # convertendo os bytes para string
     msg = msg_bytes.decode()
     print("Mensagem recebida de " + str(client) + ": " + msg)
-    server_socket.sendto(str.encode("ACK"), ("localhost", 3000))
+    server_socket.sendto(str.encode("ACK"), client)
 
 server_socket.close()
