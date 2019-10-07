@@ -85,7 +85,10 @@ def sync(pkt):
     while True:
         print(". ", end="")
         send_pack(pkt)
-        listen()
+        if listen():
+            break
+        else
+            continue
 
 def listen():
     msg_bytes, peer = recv_sock.recvfrom(SEG_SIZE)
