@@ -84,12 +84,11 @@ def sync(pkt):
 
     while True:
         if pkt.data == "SYN":
-            print(". ", end="")
             send_pack(pkt)
             break
         else:
             print(". ", end="")
-            send_pack(pkt)
+            send_msg(pkt.data)
             if listen():
                 break
 
