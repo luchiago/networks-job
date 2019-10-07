@@ -9,11 +9,11 @@ class uPack:
     # retorna o objeto em formato de string json
     def toString(self):
         msg = "{"
-        msg += "send_port: " + str(self.send_port) + ","
-        msg += "dest_port: " + str(self.dest_port) + ","
-        msg += "id_seq: " + str(self.id_seq) + ","
-        msg += "isAck: " + str(self.isAck) + ","
-        msg += "data: " + str(self.data) + ""
+        msg += "\"send_port\": \"" + str(self.send_port) + "\","
+        msg += "\"dest_port\": \"" + str(self.dest_port) + "\","
+        msg += "\"id_seq\": \"" + str(self.id_seq) + "\","
+        msg += "\"isAck\": \"" + str(self.isAck) + "\","
+        msg += "\"data\": \"" + str(self.data) + "\""
         msg += "}"
         
         return msg

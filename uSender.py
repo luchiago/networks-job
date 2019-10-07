@@ -93,7 +93,9 @@ def sync():
 
 def listen():
     msg_bytes, peer = recv_sock.recvfrom(SEG_SIZE)
-    res_pkt = json.loads(msg_bytes.decode())
+    msg = msg_bytes.decode()
+    print(msg)
+    res_pkt = json.loads(msg)
 
     if res_pkt['data'] == "SYN":
         global send_ip
