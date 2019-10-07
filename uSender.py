@@ -83,11 +83,16 @@ def sync(pkt):
     print("Estabelecendo conexão com " + str(send_ip) + ". ", end="")
 
     while True:
-        print(". ", end="")
-        send_pack(pkt)
-        if listen():
+        if pkt.data == "SYN":
+            print(". ", end="")
+            send_pack(pkt)
             break
-        else
+        else:
+            print(". ", end="")
+            send_pack(pkt)
+            listen():
+            break
+        else:
             continue
 
 def listen():
