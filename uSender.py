@@ -80,10 +80,6 @@ def send_msg(msg):
 def sync():
     global send_ip
 
-    print("Estabelecer conexão. Insira o IP do oponente: ")
-    send_ip = input('Insira ip destino: ')
-    sync_pkt = make_pack("SYN")
-
     print("Estabelecendo conexão com " + str(send_ip) + ". ", end="")
 
     while True:
@@ -94,14 +90,18 @@ def sync():
 def listen():
     msg_bytes, peer = recv_sock.recvfrom(SEG_SIZE)
     msg = msg_bytes.decode()
-    print(msg)
+    print("Recebido de " + str(peer) + str(msg))
     res_pkt = json.loads(msg)
 
-    if res_pkt['data'] == "SYN":
+    if res_pkt['data'] == "RST":
         global send_ip
         send_ip = peer[0]
         sync()
 
+    if res_pkt['data'] == "SYN":
+        print("Conexão estabelecida.")
+        
+        return True
 ### MAIN HERE ###
 
 SEG_SIZE = 100
@@ -124,6 +124,11 @@ while op < 0 or op > 2:
     op = int(input())
 
 if op == 1:
+    print("Estabelecer conexão. Insira o IP do oponente: ")
+ 
+    send_ip = input('Insira ip destino: ')
+    sync_pkt = make_pack("RST")
+
     sync()
 else:
     listen()
