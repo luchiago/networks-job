@@ -77,14 +77,14 @@ def send_msg(msg):
     
     return True
 
-def sync():
+def sync(pkt):
     global send_ip
 
     print("Estabelecendo conexão com " + str(send_ip) + ". ", end="")
 
     while True:
         print(". ", end="")
-        send_pack(sync_pkt)
+        send_pack(pkt)
         listen()
 
 def listen():
