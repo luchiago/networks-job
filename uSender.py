@@ -1,6 +1,5 @@
-import socket
-from common import ip_checksum
-import uPack
+import socket, json
+from uPack import *
 from multiprocessing.pool import ThreadPool
 
 def timeout(seconds):
@@ -15,16 +14,17 @@ def timeout(seconds):
         return wrapper
     return decorator
 
-SEG_SIZE = 100
-prox_id = 0
-send_port = 4000
-dest_port = 5000
-send_ip = "localhost"
-my_ip = "localhost"
-
-send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-recv_sock.bind((my_ip, send_port))
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 @timeout(3)
 def send_pack(uPack):
@@ -34,24 +34,39 @@ def send_pack(uPack):
     
 
 def sendAck(id_seq):
-    uPack(send_port, dest_port, id_seq, True, None, None)
+    uPack(send_port, dest_port, id_seq, True, None)
 
 
 def make_pack(data):
     # send_port, dest_port, id_seq, isAck, checksum,  data
-    pack = uPack(send_port, dest_port, None, False, ip_checksum(data), data)
+    pack = uPack(send_port, dest_port, None, False, data)
     return pack
 
+def receive():
+    msg_bytes, server =  recv_sock.recvfrom(SEG_SIZE)
+    res_pkt = json.loads(msg_bytes.decode())
+
+    send_prt = res_pkt['send_port']
+    dest_prt = res_pkt['dest_port']
+    id = res_pkt['id_seq']
+    ack = res_pkt['isAck']
+    data = res_pkt['data']
+    
+    pkt = uPack(send_prt, dest_prt, id, ack, data)
+
+    return pkt
+
 def send_msg(msg):
+    global prox_id
     pkt = make_pack(msg)
     pkt.setId_req(prox_id)
     prox_id = 1 - prox_id
     expected = pkt.id_seq
     send_pack(pkt)
-    ack = recv_sock.recvfrom(SEG_SIZE)
-
+    resp = receive()
+    
     while True:
-        if isinstance(ack, TimeoutError) or ack.id_seq != expected:
+        if isinstance(ack, TimeoutError) or (resp.isAck and resp.id_seq != expected):
             print("Timeout. Pacote " + str(pkt.id_seq) + " perdido. Reenviando.")
             send_pack(pkt)
             ack = recv_sock.recvfrom(SEG_SIZE)
@@ -61,3 +76,51 @@ def send_msg(msg):
             break
     
     return True
+
+def sync():
+    global send_ip
+
+    print("Estabelecer conexão. Insira o IP do oponente: ")
+    send_ip = input('Insira ip destino: ')
+    sync_pkt = make_pack("SYN")
+
+    print("Estabelecendo conexão com " + str(send_ip) + ". ", end="")
+
+    while True:
+        print(". ", end="")
+        send_pack(sync_pkt)
+        listen()
+
+def listen():
+    msg_bytes, peer = recv_sock.recvfrom(SEG_SIZE)
+    res_pkt = json.loads(msg_bytes.decode())
+
+    if res_pkt['data'] == "SYN":
+        global send_ip
+        send_ip = peer[0]
+
+### MAIN HERE ###
+
+SEG_SIZE = 100
+prox_id = 0
+send_port = 4000
+dest_port = 5000
+send_ip = "localhost"
+my_ip = get_ip()
+
+send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# ativando o listen do servdor
+recv_sock.bind((my_ip, send_port))
+
+print("Necessário estabelecer conexão. Escolha: ")
+print("1 - Realizar chamada\n2 - Esperar chamada")
+op = -1
+
+while op < 0 or op > 2:
+    op = int(input())
+
+if op == 1:
+    sync()
+else:
+    listen()
