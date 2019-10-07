@@ -96,7 +96,8 @@ def listen():
     if res_pkt['data'] == "RST":
         global send_ip
         send_ip = peer[0]
-        sync()
+        pkt = make_pack("SYN")
+        sync(pkt)
 
     if res_pkt['data'] == "SYN":
         print("Conexão estabelecida.")
@@ -129,6 +130,6 @@ if op == 1:
     send_ip = input('Insira ip destino: ')
     sync_pkt = make_pack("RST")
 
-    sync()
+    sync(sync_pkt)
 else:
     listen()
