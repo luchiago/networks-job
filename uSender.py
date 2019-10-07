@@ -88,8 +88,8 @@ def sync(pkt):
             break
         else:
             print(". ", end="")
-            send_msg(pkt.data)
-            if listen():
+            
+            if send_msg(pkt.data) and listen():
                 break
 
 def listen():
