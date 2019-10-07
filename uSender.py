@@ -100,6 +100,7 @@ def listen():
     if res_pkt['data'] == "SYN":
         global send_ip
         send_ip = peer[0]
+        sync()
 
 ### MAIN HERE ###
 
