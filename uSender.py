@@ -116,3 +116,13 @@ def set_ip_dest(ip):
 def set_ my_ip(ip):
     global my_ip
     my_ip = ip
+
+send_ip = input("IP destino: ")
+my_ip = input("meu ip: ")
+
+
+while True:
+    send_msg(input("Sua msg: "))
+    msg = receive()
+    print(" <<< " + str(msg.data))
+    

@@ -34,7 +34,10 @@ def mount_pack(jsn):
 def receive():
     msg_bytes, server =  recv_sock.recvfrom(SEG_SIZE)
     res_pkt = json.loads(msg_bytes.decode())
-   
+    
+    global send_ip
+    send_ip = server[0]
+    
     pkt = mount_pack(res_pkt)
  
     return pkt
@@ -107,4 +110,13 @@ def set_ip_dest(ip):
 
 def set_ my_ip(ip):
     global my_ip
-    my_ip = ip
+    my_ip = ip  
+
+send_ip = input("IP destino: ")
+my_ip = input("meu ip: ")
+
+
+while True:
+    msg = receive()
+    print(" <<< " + str(msg.data))
+    send_msg(input("Sua msg: "))
