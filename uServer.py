@@ -79,25 +79,32 @@ recv_sock.settimeout(2)
  
 last_pkt_id = 0
 
- 
-msg_received = False
- 
-while True:
-    while not msg_received:
+def send(msg):
+    while True:
+        if send_msg(msg):
+            break
+    
+def receive():
+    while True:
         try:
-            pkt = receive()
+            # tentando receber uma mensagem
+            pkt = receiv()
         except timeout:
-            msg_received = False
+            # timeout = nenhuma mensagem recebida, não fazer nada
+            continue
         else:
-            # caso receba o pkt novamente, reenvia o ack perdido
+            # se o pacote recebido igual, o ack foi perdido. Reenviando
             if pkt.id_seq == last_pkt_id:
-                ack = send_pack(pkt)
+                sendAck(last_pkt_id)
             else:
-                # mensagem não repetida, enviando ack
-                print(" <<< " + str(pkt.data))    
+                # caso receba o pkt novo envia o ack e atualiza o last_pkt_id
                 sendAck(pkt.id_seq)
-                msg_received = True
-   
-    msg = input(">> ")
-    send_msg(msg)
-    msg_received = False
+                last_pkt_id = pkt.id_seq
+
+def set_ip_dest(ip):
+    global send_ip
+    send_ip = ip
+
+def set_ my_ip(ip):
+    global my_ip
+    my_ip = ip
