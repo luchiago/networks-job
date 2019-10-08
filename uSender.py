@@ -31,7 +31,7 @@ def mount_pack(jsn):
     return pkt
 
 # recebe uma mensagem
-def receive():
+def receiv():
     msg_bytes, server =  recv_sock.recvfrom(SEG_SIZE)
     res_pkt = json.loads(msg_bytes.decode())
     
@@ -42,22 +42,30 @@ def receive():
 # envia um pacote com a mensagem recebida e gerencia seu ack de confirmcao
 def send_msg(msg):
     global prox_id
+    # criando o pkt
     pkt = make_pack(msg)
+    # set id de sequencia
     pkt.setId_req(prox_id)
+    # atualizando o prox id
     prox_id = 1 - prox_id
+    # id seq do ack esperado
     expected = pkt.id_seq
     
     ack = False
 
     while not ack:
+        # envia o pkt
         send_pack(pkt)
         try:
-            ack = receive()      
+            # tenta receber o ack referente
+            ack = receiv()      
         except timeout:
+            # caso não receba antes do timeout, renvia
             print("Timeout")
         else:
+            # caso receba um pkt antes do timeout, verifica se é ack e o esperado
             if ack.isAck and ack.id_seq == expected:
-                print("ACK " +str() + " recebido")
+                print("ACK " +str(ack.id_seq) + " recebido")
                 ack = True
         
     return True
@@ -68,7 +76,7 @@ SEG_SIZE = 100
 prox_id = 0
 sender_port = 5000
 dest_port = 4000
-send_ip = "10.13.66.166"
+send_ip = "10.13.40.30"
 my_ip = "10.13.37.191"
 
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -79,22 +87,24 @@ recv_sock.settimeout(2)
 
 last_pkt_id = 0
 
-while True:
-    msg = input(">> ")
-    send_msg(msg)
-    msg_received = False
-
-    while not msg_received:
+def send(msg):
+    while True:
+        if send_msg(msg):
+            break
+    
+def receive():
+    while True:
         try:
-            pkt = receive()
+            # tentando receber uma mensagem
+            pkt = receiv()
         except timeout:
-            msg_received = False
+            # timeout = nenhuma mensagem recebida, não fazer nada
+            continue
         else:
-            # caso receba o pkt novamente, reenvia o ack perdido
+            # se o pacote recebido igual, o ack foi perdido. Reenviando
             if pkt.id_seq == last_pkt_id:
-                ack = send_pack(pkt)
+                sendAck(last_pkt_id)
             else:
-                # mensagem não repetida, enviando ack
-                print(" <<< " + str(pkt.data))    
+                # caso receba o pkt novo envia o ack e atualiza o last_pkt_id
                 sendAck(pkt.id_seq)
-                msg_received = True
+                last_pkt_id = pkt.id_seq
