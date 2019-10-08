@@ -97,8 +97,8 @@ SEG_SIZE = 100
 prox_id = 0
 sender_port = 4000
 dest_port = 5000
-send_ip = "localhost"
-my_ip = "localhost"
+send_ip = "192.168.111.2"
+my_ip = "10.0.2.15"
 
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -106,3 +106,9 @@ recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock.bind((my_ip, sender_port))
 
 listen()
+
+while True:
+    pkt = receive()
+
+    print(pkt.data)
+    sendAck(pkt.id_seq)
