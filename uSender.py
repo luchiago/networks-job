@@ -62,7 +62,7 @@ def send_msg(msg):
     pkt.setId_req(prox_id)
     prox_id = 1 - prox_id
     expected = pkt.id_seq
-    send_pack(pkt)
+    ack = send_pack(pkt)
     resp = receive()
     
     while True:
@@ -93,9 +93,13 @@ def sync(pkt):
                 break
         else:
             print(". ", end="")
-            send_msg(pkt.data)
-            if listen():
-                break
+            rst = send_pack(pkt)
+            listen()
+
+            if isinstance(rst, TimeoutError):
+                print("Timeout na conexão. Tentando novamente.")
+                continue
+
 
 def listen():
     msg_bytes, peer = recv_sock.recvfrom(SEG_SIZE)
