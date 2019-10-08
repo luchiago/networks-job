@@ -30,16 +30,16 @@ def get_ip():
 def send_pack(uPack):
     msg = uPack.toString()
     msg_bytes = str.encode(msg)
-    return send_sock.sendto(msg_bytes, (send_ip, send_port))
+    return send_sock.sendto(msg_bytes, (send_ip, dest_port))
     
 
 def sendAck(id_seq):
-    uPack(send_port, dest_port, id_seq, True, None)
+    uPack(sender_port, dest_port, id_seq, True, None)
 
 
 def make_pack(data):
     # send_port, dest_port, id_seq, isAck, checksum,  data
-    pack = uPack(send_port, dest_port, None, False, data)
+    pack = uPack(sender_port, dest_port, None, False, data)
     return pack
 
 def receive():
@@ -95,7 +95,7 @@ def listen():
 
 SEG_SIZE = 100
 prox_id = 0
-send_port = 4000
+sender_port = 4000
 dest_port = 5000
 send_ip = "localhost"
 my_ip = get_ip()
@@ -103,6 +103,6 @@ my_ip = get_ip()
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # ativando o listen do servdor
-recv_sock.bind((my_ip, send_port))
+recv_sock.bind((my_ip, sender_port))
 
 listen()
