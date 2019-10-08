@@ -98,7 +98,7 @@ prox_id = 0
 sender_port = 4000
 dest_port = 5000
 send_ip = "localhost"
-my_ip = get_ip()
+my_ip = "localhost"
 
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
