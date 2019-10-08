@@ -108,3 +108,11 @@ def receive():
                 # caso receba o pkt novo envia o ack e atualiza o last_pkt_id
                 sendAck(pkt.id_seq)
                 last_pkt_id = pkt.id_seq
+
+def set_ip_dest(ip):
+    global send_ip
+    send_ip = ip
+
+def set_ my_ip(ip):
+    global my_ip
+    my_ip = ip
