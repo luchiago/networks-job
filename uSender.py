@@ -68,7 +68,7 @@ SEG_SIZE = 100
 prox_id = 0
 sender_port = 5000
 dest_port = 4000
-send_ip = "10.0.2.15"
+send_ip = "10.13.66.166"
 my_ip = "10.13.37.191"
 
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
