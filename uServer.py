@@ -77,24 +77,20 @@ def send_msg(msg):
     
     return True
 
-def sync():
-    global send_ip
+def listen():
+    msg_bytes, peer = recv_sock.recvfrom(SEG_SIZE)
+    msg = msg_bytes.decode()
+    print("Recebido de " + str(peer) + str(msg))
+    res_pkt = json.loads(msg)
 
-    print("Estabelecendo conexão com " + str(send_ip) + ". ", end="")
-
-    pkt = make_pack("RST")
+    if res_pkt['data'] == "RST":
+        global send_ip
+        send_ip = peer[0]
+        pkt = make_pack("SYN")
+        send_pack(pkt)
     
-    while True:
-        result = send_pack(pkt)
+        return True
         
-        if isinstance(result, TimeoutError):
-            print(". ", end="")
-            continue
-        else:
-            print("Conecxão estabelecida")
-            break
-    
-
 ### MAIN HERE ###
 
 SEG_SIZE = 100
@@ -109,4 +105,4 @@ recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # ativando o listen do servdor
 recv_sock.bind((my_ip, send_port))
 
-sync()
+listen()
