@@ -31,7 +31,7 @@ def mount_pack(jsn):
     return pkt
  
 # recebe uma mensagem
-def receive():
+def receiv():
     msg_bytes, server =  recv_sock.recvfrom(SEG_SIZE)
     res_pkt = json.loads(msg_bytes.decode())
     
