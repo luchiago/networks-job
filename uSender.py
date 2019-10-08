@@ -99,8 +99,8 @@ def sync():
 
 SEG_SIZE = 100
 prox_id = 0
-sender_port = 4000
-dest_port = 5000
+sender_port = 5000
+dest_port = 4000
 send_ip = "localhost"
 my_ip = get_ip()
 
