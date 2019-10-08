@@ -108,7 +108,7 @@ def set_ip_dest(ip):
     global send_ip
     send_ip = ip
 
-def set_ my_ip(ip):
+def set_my_ip(ip):
     global my_ip
     my_ip = ip  
 
