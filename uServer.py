@@ -2,6 +2,25 @@ import socket, json
 from socket import timeout
 from uPack import *
  
+
+
+SEG_SIZE = 100
+prox_id = 0
+sender_port = 4000
+dest_port = 5000
+
+send_ip = input("IP destino: ")
+my_ip = input("meu ip: ")
+ 
+send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# ativando o listen do servdor
+recv_sock.bind((my_ip, sender_port))
+recv_sock.settimeout(2)
+ 
+last_pkt_id = 0
+
+
 # evia um pacote para o destino
 def send_pack(uPack):
     msg = uPack.toString()
@@ -64,7 +83,7 @@ def send_msg(msg):
                 ack = True
        
     return True
-    
+
 def send(msg):
     while True:
         if send_msg(msg):
@@ -96,23 +115,6 @@ def set_my_ip(ip):
     my_ip = ip  
 
 ### MAIN HERE ###
- 
-SEG_SIZE = 100
-prox_id = 0
-sender_port = 4000
-dest_port = 5000
-
-send_ip = input("IP destino: ")
-my_ip = input("meu ip: ")
- 
-send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# ativando o listen do servdor
-recv_sock.bind((my_ip, sender_port))
-recv_sock.settimeout(2)
- 
-last_pkt_id = 0
-
 
 
 while True:
