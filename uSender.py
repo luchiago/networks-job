@@ -84,12 +84,17 @@ def sync(pkt):
 
     while True:
         if pkt.data == "SYN":
-            send_pack(pkt)
-            break
+            result = send_pack(pkt)
+
+            if isinstance(result, TimeoutError):
+                continue
+            else:
+                print("Conecxão estabelecida")
+                break
         else:
             print(". ", end="")
-            
-            if send_msg(pkt.data) and listen():
+            send_msg(pkt.data)
+            if listen():
                 break
 
 def listen():
