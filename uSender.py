@@ -70,7 +70,7 @@ def send_msg(msg):
     while not ack:
         send_pack(pkt)
         try:
-            ack = receive()      
+            ack = receiv()      
         except timeout:
             print("Timeout")
         else:

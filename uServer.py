@@ -53,7 +53,7 @@ def mount_pack(jsn):
 def receiv():
     msg_bytes, server =  recv_sock.recvfrom(SEG_SIZE)
     res_pkt = json.loads(msg_bytes.decode())
-     
+
     pkt = mount_pack(res_pkt)
  
     return pkt
@@ -71,7 +71,7 @@ def send_msg(msg):
     while not ack:
         send_pack(pkt)
         try:
-            ack = receive()      
+            ack = receiv()      
         except timeout:
             print("Timeout")
         else:
