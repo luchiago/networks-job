@@ -79,11 +79,6 @@ def send_msg(msg):
                 ack = True
        
     return True
-
-def send(msg):
-    while True:
-        if send_msg(msg):
-            break
     
 def receive():
     while True:
@@ -103,13 +98,9 @@ def receive():
                 last_pkt_id = pkt.id_seq
                 return pkt
 
-def set_ip_dest(ip):
-    global send_ip
-    send_ip = ip
+def prepare_data(data):
+    return None
 
-def set_my_ip(ip):
-    global my_ip
-    my_ip = ip  
 
 
 eletric_moves = [app.Move("Thunderbolt", 15.0, 100.0, 7), app.Move(
@@ -119,6 +110,7 @@ pikachu = app.Pokemon("Pikachu", 5, eletric_moves)
 while True:
     
     pokemon_data = app.prepare_dic(pikachu)
+    print(pokemon_data)
     send_msg(pokemon_data)
     msg = receive()
     pokemon_data = msg.data

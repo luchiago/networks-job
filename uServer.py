@@ -80,11 +80,6 @@ def send_msg(msg):
                 ack = True
        
     return True
-
-def send(msg):
-    while True:
-        if send_msg(msg):
-            break
     
 def receive():
     while True:
@@ -103,15 +98,9 @@ def receive():
                 sendAck(pkt.id_seq)
                 last_pkt_id = pkt.id_seq
 
-def set_ip_dest(ip):
-    global send_ip
-    send_ip = ip
-
-def set_my_ip(ip):
-    global my_ip
-    my_ip = ip  
-
-
+def prepare_data(data):
+    return None
+    
 ### MAIN HERE ###
 fire_moves = [app.Move("Tackle", 12.0, 100.0, 10), app.Move(
     "QuickAttack", 14.0, 100.0, 7), app.Move("Ember", 15.0, 100.0, 7)]
