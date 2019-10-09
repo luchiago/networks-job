@@ -85,7 +85,7 @@ msg_received = False
 
 fire_moves = [app.Move("Tackle", 12.0, 100.0, 10), app.Move(
     "QuickAttack", 14.0, 100.0, 7), app.Move("Ember", 15.0, 100.0, 7)]
-charmander = app.Pokemon("Charmander", 5, fire_moves)
+charmander = app.Pokemon("Charmander", 30, fire_moves)
 
 pokemon_remote = None
 finished = False
@@ -111,7 +111,7 @@ while not finished:
                 msg_received = True
 
     pokemon_remote = app.convert_dic(pokemon_remote)
-    app.turn(charmander, pokemon_remote)
+    charmander, pokemon_remote = app.turn(charmander, pokemon_remote)
     
     if pokemon_remote.health < 0:
         print(pokemon_remote.name + " has been defeated!")

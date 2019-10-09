@@ -127,13 +127,14 @@ while not finished:
                     send_msg("You are a good trainer")
                     finished = True
                 else:
-                    pokemon_local = eval(pkt.data)[0]
-                    pokemon_remote = eval(pkt.data)[1]
+                    print(pkt.data)
+                    pokemon_local = eval(pkt.data)[1]
+                    pokemon_remote = eval(pkt.data)[0]
                 sendAck(pkt.id_seq)
                 msg_received = True
     pikachu = app.convert_dic(pokemon_local)
     pokemon_remote = app.convert_dic(pokemon_remote)
-    app.turn(pikachu, pokemon_remote)
+    pikachu, pokemon_remote = app.turn(pikachu, pokemon_remote)
     if pokemon_remote.health < 0:
         print(pokemon_remote.name + " has been defeated!")
         print(pikachu.name + " WIN!")

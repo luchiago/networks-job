@@ -74,9 +74,10 @@ def turn(local_pokemon, remote_pokemon):
                 compute_damage(remote_pokemon, move.power)
             else:
                 print("\nMiss!!! You'r too slow! :]\n")
-            return
+            return local_pokemon, remote_pokemon
 
     print("You'r a terrible trainer!")
+    return local_pokemon, remote_pokemon
 
 
 def prepare_dic(pokemon):
