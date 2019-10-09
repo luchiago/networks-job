@@ -65,7 +65,7 @@ def send_msg(msg):
 
 ### MAIN HERE ###
 
-SEG_SIZE = 100
+SEG_SIZE = 1000
 prox_id = 0
 sender_port = 5000
 dest_port = 4000
@@ -82,7 +82,7 @@ last_pkt_id = 0
 
 eletric_moves = [app.Move("Thunderbolt", 15.0, 100.0, 7), app.Move(
     "QuickAttack", 14.0, 100.0, 7), app.Move("ThunderShock", 20.0, 100.0, 3)]
-pikachu = app.Pokemon("Pikachu", 5, eletric_moves)
+pikachu = app.Pokemon("Pikachu", 20, eletric_moves)
 
 while True:
     msg = app.prepare_dic(pikachu)
@@ -102,7 +102,12 @@ while True:
                 ack = send_pack(pkt)
             else:
                 # mensagem não repetida, enviando ack
-                pokemon_remote = eval(pkt.data)    
+                if pkt.data == "You lose":
+                    print(pkt.data)
+                    send_msg("You are a good trainer")
+                    return
+                else:
+                    pokemon_remote = eval(pkt.data)    
                 sendAck(pkt.id_seq)
                 msg_received = True
     moves = pokemon_remote['moves']
@@ -113,7 +118,11 @@ while True:
     remote_pokemon = app.Pokemon(
         pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
     app.turn(pikachu, remote_pokemon)
-    if pikachu.health < 0:
-        print(pikachu.name + " has been defeated!")
-    print("END GAME")
-    break
+    if remote_pokemon.health < 0:
+        print(remote_pokemon.name + " has been defeated!")
+        print(pikachu.name + " WIN!")
+        print("END GAME")
+        msg = "You lose"
+        send_msg(msg)
+        msg_received = False
+        break
