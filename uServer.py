@@ -106,15 +106,18 @@ while not finished:
                 else:
                     # mensagem não repetida, enviando ack
                     pokemon_local = eval(pkt.data)[1]
+                    print(pokemon_local)
                     pokemon_remote = eval(pkt.data)[0]
                 sendAck(pkt.id_seq)
                 msg_received = True
 
     if not finished:
+        if pokemon_local is not None:
+            charmander = app.convert_dic(pokemon_local)
         pokemon_remote = app.convert_dic(pokemon_remote)
         charmander, pokemon_remote = app.turn(charmander, pokemon_remote)
         
-        if pokemon_remote.health < 0:
+        if pokemon_remote.health <= 0:
             print(pokemon_remote.name + " has been defeated!")
             print(charmander.name + " WIN!")
             print("END GAME")
