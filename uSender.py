@@ -104,6 +104,7 @@ def receive():
                 # caso receba o pkt novo envia o ack e atualiza o last_pkt_id
                 sendAck(pkt.id_seq)
                 last_pkt_id = pkt.id_seq
+                return pkt
 
 def set_ip_dest(ip):
     global send_ip
@@ -131,7 +132,7 @@ while True:
             app.Move(move[0], move[1], move[2], move[3]))
     remote_pokemon = app.Pokemon(
         pokemon_data['name'], pokemon_data['health'], remote_pokemon_move)
-    turn(pikachu, remote_pokemon)
+    app.turn(pikachu, remote_pokemon)
     if pikachu.health < 0:
         print(pikachu.name + " has been defeated!")
     print("END GAME")
