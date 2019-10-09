@@ -98,10 +98,6 @@ def receive():
                 last_pkt_id = pkt.id_seq
                 return pkt
 
-def prepare_data(data):
-    return None
-
-
 
 eletric_moves = [app.Move("Thunderbolt", 15.0, 100.0, 7), app.Move(
     "QuickAttack", 14.0, 100.0, 7), app.Move("ThunderShock", 20.0, 100.0, 3)]
@@ -110,10 +106,10 @@ pikachu = app.Pokemon("Pikachu", 5, eletric_moves)
 while True:
     
     pokemon_data = app.prepare_dic(pikachu)
-    print(pokemon_data)
+    pokemon_data = pokemon_data.__str__()
     send_msg(pokemon_data)
     msg = receive()
-    pokemon_data = msg.data
+    pokemon_data = eval(msg.data)
     moves = pokemon_data['moves']
     remote_pokemon_move = []
     for move in moves:

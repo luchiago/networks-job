@@ -99,8 +99,6 @@ def receive():
                 sendAck(pkt.id_seq)
                 last_pkt_id = pkt.id_seq
 
-def prepare_data(data):
-    return None
 
 ### MAIN HERE ###
 fire_moves = [app.Move("Tackle", 12.0, 100.0, 10), app.Move(
@@ -110,7 +108,7 @@ charmander = app.Pokemon("Charmander", 5, fire_moves)
 while True:
     
     msg = receive()
-    pokemon_data = msg.data
+    pokemon_data = eval(msg.data)
     moves = pokemon_data['moves']
     remote_pokemon_move = []
     for move in moves:
@@ -124,4 +122,5 @@ while True:
     print("END GAME")
     break
     pokemon_data = app.prepare_dic(charmander)
+    pokemon_data = pokemon_data.__str__()
     send_msg(pokemon_data)
