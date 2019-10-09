@@ -8,7 +8,10 @@ SEG_SIZE = 100
 prox_id = 0
 sender_port = 4000
 dest_port = 5000
- 
+
+send_ip = "192.168.0.104"
+my_ip = "192.168.0.103"
+
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # ativando o listen do servdor
