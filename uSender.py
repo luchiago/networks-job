@@ -53,9 +53,6 @@ def receiv():
     msg_bytes, server =  recv_sock.recvfrom(SEG_SIZE)
     res_pkt = json.loads(msg_bytes.decode())
     
-    global send_ip
-    send_ip = server[0]
-    
     pkt = mount_pack(res_pkt)
  
     return pkt
