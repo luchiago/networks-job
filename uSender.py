@@ -136,14 +136,15 @@ while not finished:
             app.Move(move[0], move[1], move[2], move[3]))
     remote_pokemon = app.Pokemon(
         pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
-    moves = pokemon_local['moves']
-    local_pokemon_move = []
-    for move in moves:
-        local_pokemon_move.append(
-            app.Move(move[0], move[1], move[2], move[3]))
-    local_pokemon = app.Pokemon(
-        pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
-    pikachu = local_pokemon
+    if pokemon_local is not None or pokemon_local != "None":
+        moves = pokemon_local['moves']
+        local_pokemon_move = []
+        for move in moves:
+            local_pokemon_move.append(
+                app.Move(move[0], move[1], move[2], move[3]))
+        local_pokemon = app.Pokemon(
+            pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
+        pikachu = local_pokemon
     app.turn(pikachu, remote_pokemon)
     if remote_pokemon.health < 0:
         print(remote_pokemon.name + " has been defeated!")
