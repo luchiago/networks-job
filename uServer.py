@@ -4,13 +4,13 @@ from uPack import *
 import Application as app
 
 
-SEG_SIZE = 100
+SEG_SIZE = 100000
 prox_id = 0
 sender_port = 5000
 dest_port = 4000
 
-send_ip = "192.168.0.104"
-my_ip = "192.168.0.103"
+send_ip = "10.13.37.191"
+my_ip = "10.13.28.50"
 
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -83,6 +83,7 @@ def send_msg(msg):
     return True
     
 def receive():
+    global last_pkt_id
     while True:
         try:
             # tentando receber uma mensagem

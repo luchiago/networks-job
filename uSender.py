@@ -8,8 +8,8 @@ prox_id = 0
 sender_port = 4000
 dest_port = 5000
 
-send_ip = "192.168.0.103"
-my_ip = "192.168.0.104"
+send_ip = "10.13.37.191"
+my_ip = "10.13.28.50"
 
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
