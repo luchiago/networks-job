@@ -24,6 +24,7 @@ last_pkt_id = 0
 # evia um pacote para o destino
 def send_pack(uPack):
     msg = uPack.toString()
+
     msg_bytes = str.encode(msg)
     return send_sock.sendto(msg_bytes, (send_ip, dest_port))
  
@@ -100,7 +101,7 @@ def receive():
 
 def prepare_data(data):
     return None
-    
+
 ### MAIN HERE ###
 fire_moves = [app.Move("Tackle", 12.0, 100.0, 10), app.Move(
     "QuickAttack", 14.0, 100.0, 7), app.Move("Ember", 15.0, 100.0, 7)]
@@ -117,7 +118,7 @@ while True:
             app.Move(move[0], move[1], move[2], move[3]))
     remote_pokemon = app.Pokemon(
         pokemon_data['name'], pokemon_data['health'], remote_pokemon_move)
-    turn(charmander, remote_pokemon)
+    app.turn(charmander, remote_pokemon)
     if charmander.health < 0:
         print(charmander.name + " has been defeated!")
     print("END GAME")
