@@ -99,6 +99,11 @@ while True:
             if pkt.id_seq == last_pkt_id:
                 ack = send_pack(pkt)
             else:
+                if pkt.data == "You lose":
+                    print(pkt.data)
+                    send_msg("You are a good trainer")
+                    return 
+
                 # mensagem não repetida, enviando ack
                 pokemon_remote = eval(pkt.data)
                 sendAck(pkt.id_seq)
@@ -116,11 +121,14 @@ while True:
     
     app.turn(charmander, remote_pokemon)
     
-    if charmander.health < 0:
-        print(charmander.name + " has been defeated!")
-    
-    print("END GAME")
-    break
+    if remote_pokemon.health < 0:
+        print(remote_pokemon.name + " has been defeated!")
+        print(pikachu.name + " WIN!")
+        print("END GAME")
+        msg = "You lose"
+        send_msg(msg)
+        msg_received = False
+        break
 
     pokemon_data = app.prepare_dic(charmander)
     pokemon_data = pokemon_data.__str__()
