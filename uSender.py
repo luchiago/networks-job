@@ -136,7 +136,7 @@ while not finished:
         pikachu = app.convert_dic(pokemon_local)
         pokemon_remote = app.convert_dic(pokemon_remote)
         pikachu, pokemon_remote = app.turn(pikachu, pokemon_remote)
-        if pokemon_remote.health < 0:
+        if pokemon_remote.health <= 0:
             print(pokemon_remote.name + " has been defeated!")
             print(pikachu.name + " WIN!")
             print("END GAME")
