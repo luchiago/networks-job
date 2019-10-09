@@ -34,6 +34,7 @@ def mount_pack(jsn):
 # recebe uma mensagem
 def receive():
     msg_bytes, server =  recv_sock.recvfrom(SEG_SIZE)
+    print(msg_bytes.decode())
     res_pkt = json.loads(msg_bytes.decode())
    
     pkt = mount_pack(res_pkt)
@@ -65,12 +66,12 @@ def send_msg(msg):
  
 ### MAIN HERE ###
  
-SEG_SIZE = 100
+SEG_SIZE = 1000
 prox_id = 0
 sender_port = 4000
 dest_port = 5000
-send_ip = "10.13.37.191"
-my_ip = "10.13.28.50"
+send_ip = "10.13.28.50"
+my_ip = "10.13.37.191"
  
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -105,14 +106,19 @@ while True:
     
     moves = pokemon_remote['moves']
     remote_pokemon_move = []
+    
     for move in moves:
         remote_pokemon_move.append(
             app.Move(move[0], move[1], move[2], move[3]))
+    
     remote_pokemon = app.Pokemon(
         pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
+    
     app.turn(charmander, remote_pokemon)
+    
     if charmander.health < 0:
         print(charmander.name + " has been defeated!")
+    
     print("END GAME")
     break
 
