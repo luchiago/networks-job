@@ -94,7 +94,7 @@ def convert_dic(dic):
     pokemon_moves = dic['moves']
     moves = []
     for move in pokemon_moves:
-        moves.append(Move(move[0]), move[1], move[2], move[3])
+        moves.append(Move(move[0], move[1], move[2], move[3]))
     pokemon = Pokemon(dic['name'], dic['health'], moves)
     return pokemon
 

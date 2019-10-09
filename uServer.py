@@ -109,9 +109,7 @@ while not finished:
                     pokemon_remote = eval(pkt.data)[0]
                 sendAck(pkt.id_seq)
                 msg_received = True
-    
-    if pokemon_local is None:
-        continue
+
     pokemon_remote = app.convert_dic(pokemon_remote)
     app.turn(charmander, pokemon_remote)
     
