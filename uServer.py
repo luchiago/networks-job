@@ -88,7 +88,8 @@ fire_moves = [app.Move("Tackle", 12.0, 100.0, 10), app.Move(
 charmander = app.Pokemon("Charmander", 5, fire_moves)
 
 pokemon_remote = None
-while True:
+finished = False
+while not finished:
     while not msg_received:
         try:
             pkt = receive()
@@ -100,12 +101,12 @@ while True:
                 ack = send_pack(pkt)
             else:
                 if pkt.data == "You lose":
-                    print(pkt.data)
                     send_msg("You are a good trainer")
-                    return 
-
-                # mensagem não repetida, enviando ack
-                pokemon_remote = eval(pkt.data)
+                    finished = True
+                else:
+                    # mensagem não repetida, enviando ack
+                    pokemon_local = eval(pkt.data)[1]
+                    pokemon_remote = eval(pkt.data)[0]
                 sendAck(pkt.id_seq)
                 msg_received = True
     
@@ -118,19 +119,27 @@ while True:
     
     remote_pokemon = app.Pokemon(
         pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
-    
+    moves = pokemon_local['moves']
+    local_pokemon_move = []
+    for move in moves:
+        local_pokemon_move.append(
+            app.Move(move[0], move[1], move[2], move[3]))
+    local_pokemon = app.Pokemon(
+        pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
+    charmander = local_pokemon
     app.turn(charmander, remote_pokemon)
     
     if remote_pokemon.health < 0:
         print(remote_pokemon.name + " has been defeated!")
-        print(pikachu.name + " WIN!")
+        print(charmander.name + " WIN!")
         print("END GAME")
         msg = "You lose"
         send_msg(msg)
         msg_received = False
-        break
+        finished = True
 
     pokemon_data = app.prepare_dic(charmander)
+    pokemon_data = [pokemon_data, remote_pokemon]
     pokemon_data = pokemon_data.__str__()
     send_msg(pokemon_data)
     msg_received = False
