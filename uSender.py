@@ -1,6 +1,7 @@
 import socket, json
 from socket import timeout
 from uPack import *
+import Application as app
 
 # evia um pacote para o destino
 def send_pack(uPack):
@@ -79,11 +80,17 @@ recv_sock.settimeout(2)
 
 last_pkt_id = 0
 
+eletric_moves = [app.Move("Thunderbolt", 15.0, 100.0, 7), app.Move(
+    "QuickAttack", 14.0, 100.0, 7), app.Move("ThunderShock", 20.0, 100.0, 3)]
+pikachu = app.Pokemon("Pikachu", 5, eletric_moves)
+
 while True:
-    msg = input(">> ")
+    msg = app.prepare_dic(pikachu)
+    msg = msg.__str__()
     send_msg(msg)
     msg_received = False
 
+    pokemon_remote = None
     while not msg_received:
         try:
             pkt = receive()
@@ -95,6 +102,18 @@ while True:
                 ack = send_pack(pkt)
             else:
                 # mensagem não repetida, enviando ack
-                print(" <<< " + str(pkt.data))    
+                pokemon_remote = eval(pkt.data)    
                 sendAck(pkt.id_seq)
                 msg_received = True
+    moves = pokemon_remote['moves']
+    remote_pokemon_move = []
+    for move in moves:
+        remote_pokemon_move.append(
+            app.Move(move[0], move[1], move[2], move[3]))
+    remote_pokemon = app.Pokemon(
+        pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
+    app.turn(pikachu, remote_pokemon)
+    if pikachu.health < 0:
+        print(pikachu.name + " has been defeated!")
+    print("END GAME")
+    break
