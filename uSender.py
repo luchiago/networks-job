@@ -136,7 +136,7 @@ while not finished:
             app.Move(move[0], move[1], move[2], move[3]))
     remote_pokemon = app.Pokemon(
         pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
-    if pokemon_local is not None or pokemon_local != "None":
+    if pokemon_local is not None and pokemon_local != "None":
         moves = pokemon_local['moves']
         local_pokemon_move = []
         for move in moves:
