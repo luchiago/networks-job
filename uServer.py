@@ -1,7 +1,7 @@
 import socket, json
 from socket import timeout
 from uPack import *
- 
+import Application as app
 
 
 SEG_SIZE = 100
@@ -111,10 +111,27 @@ def set_my_ip(ip):
     global my_ip
     my_ip = ip  
 
-### MAIN HERE ###
 
+### MAIN HERE ###
+fire_moves = [app.Move("Tackle", 12.0, 100.0, 10), app.Move(
+    "QuickAttack", 14.0, 100.0, 7), app.Move("Ember", 15.0, 100.0, 7)]
+charmander = app.Pokemon("Charmander", 5, fire_moves)
 
 while True:
+    
     msg = receive()
-    print(" <<< " + str(msg.data))
-    send_msg(input("Sua msg: "))
+    pokemon_data = msg.data
+    moves = pokemon_data['moves']
+    remote_pokemon_move = []
+    for move in moves:
+        remote_pokemon_move.append(
+            app.Move(move[0], move[1], move[2], move[3]))
+    remote_pokemon = app.Pokemon(
+        pokemon_data['name'], pokemon_data['health'], remote_pokemon_move)
+    turn(charmander, remote_pokemon)
+    if charmander.health < 0:
+        print(charmander.name + " has been defeated!")
+    print("END GAME")
+    break
+    pokemon_data = app.prepare_dic(charmander)
+    send_msg(pokemon_data)
