@@ -110,28 +110,13 @@ while not finished:
                 sendAck(pkt.id_seq)
                 msg_received = True
     
-    moves = pokemon_remote['moves']
-    remote_pokemon_move = []
+    if pokemon_local is None:
+        continue
+    pokemon_remote = app.convert_dic(pokemon_remote)
+    app.turn(charmander, pokemon_remote)
     
-    for move in moves:
-        remote_pokemon_move.append(
-            app.Move(move[0], move[1], move[2], move[3]))
-    
-    remote_pokemon = app.Pokemon(
-        pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
-    if pokemon_local is not None and pokemon_local != "None":
-        moves = pokemon_local['moves']
-        local_pokemon_move = []
-        for move in moves:
-            local_pokemon_move.append(
-                app.Move(move[0], move[1], move[2], move[3]))
-        local_pokemon = app.Pokemon(
-            pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
-        charmander = local_pokemon
-    app.turn(charmander, remote_pokemon)
-    
-    if remote_pokemon.health < 0:
-        print(remote_pokemon.name + " has been defeated!")
+    if pokemon_remote.health < 0:
+        print(pokemon_remote.name + " has been defeated!")
         print(charmander.name + " WIN!")
         print("END GAME")
         msg = "You lose"
@@ -139,10 +124,10 @@ while not finished:
         msg_received = False
         finished = True
 
-    pokemon_data = app.prepare_dic(charmander)
-    if remote_pokemon is not None and remote_pokemon != "None":
-        remote_pokemon = app.prepare_dic(remote_pokemon)
-    pokemon_data = [pokemon_data, remote_pokemon]
-    pokemon_data = pokemon_data.__str__()
-    send_msg(pokemon_data)
+    pokemon_local = app.prepare_dic(charmander)
+    pokemon_remote = app.prepare_dic(pokemon_remote)
+
+    msg = [pokemon_local, pokemon_remote] 
+    msg = msg.__str__()
+    send_msg(msg)
     msg_received = False

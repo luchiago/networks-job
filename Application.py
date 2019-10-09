@@ -90,6 +90,14 @@ def prepare_dic(pokemon):
         dic['moves'].append(tupla)
     return dic
 
+def convert_dic(dic):
+    pokemon_moves = dic['moves']
+    moves = []
+    for move in pokemon_moves:
+        moves.append(Move(move[0]), move[1], move[2], move[3])
+    pokemon = Pokemon(dic['name'], dic['health'], moves)
+    return pokemon
+
 
 if __name__ == "__main__":
     fire_moves = [Move("Tackle", 12.0, 100.0, 10), Move(

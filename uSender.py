@@ -101,10 +101,10 @@ pokemon_remote = None
 finished = False
 
 while not finished:
-    msg = app.prepare_dic(pikachu)
-    if pokemon_remote is not None and pokemon_remote != "None":
+    pokemon_local = app.prepare_dic(pikachu)
+    if pokemon_remote is not None:
         pokemon_remote = app.prepare_dic(pokemon_remote)
-    msg = [msg, pokemon_remote]
+    msg = [pokemon_local, pokemon_remote]
     msg = msg.__str__()
     send_msg(msg)
     msg_received = False
@@ -127,29 +127,15 @@ while not finished:
                     send_msg("You are a good trainer")
                     finished = True
                 else:
-                    pokemon_local = eval(pkt.data)[1]
-                    pokemon_remote = eval(pkt.data)[0]
+                    pokemon_local = eval(pkt.data)[0]
+                    pokemon_remote = eval(pkt.data)[1]
                 sendAck(pkt.id_seq)
                 msg_received = True
-    moves = pokemon_remote['moves']
-    remote_pokemon_move = []
-    for move in moves:
-        remote_pokemon_move.append(
-            app.Move(move[0], move[1], move[2], move[3]))
-    remote_pokemon = app.Pokemon(
-        pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
-    if pokemon_local is not None and pokemon_local != "None":
-        moves = pokemon_local['moves']
-        local_pokemon_move = []
-        for move in moves:
-            local_pokemon_move.append(
-                app.Move(move[0], move[1], move[2], move[3]))
-        local_pokemon = app.Pokemon(
-            pokemon_remote['name'], pokemon_remote['health'], remote_pokemon_move)
-        pikachu = local_pokemon
-    app.turn(pikachu, remote_pokemon)
-    if remote_pokemon.health < 0:
-        print(remote_pokemon.name + " has been defeated!")
+    pikachu = app.convert_dic(pokemon_local)
+    pokemon_remote = app.convert_dic(pokemon_remote)
+    app.turn(pikachu, pokemon_remote)
+    if pokemon_remote.health < 0:
+        print(pokemon_remote.name + " has been defeated!")
         print(pikachu.name + " WIN!")
         print("END GAME")
         msg = "You lose"
