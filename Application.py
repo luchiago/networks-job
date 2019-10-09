@@ -2,11 +2,9 @@ import random
 
 # Classe para instanciar novos Pokemons
 class Pokemon:
-    def __init__(self, name, health, experience, level, moves):
+    def __init__(self, name, health, moves):
         self.name = name
         self.health = health
-        self.experience = experience
-        self.level = level
         self.moves = moves
 
 # Classe para instanciar novos ataques para os pokemons
@@ -68,14 +66,25 @@ def turn(local_pokemon, remote_pokemon):
     
     print("You'r a terrible trainer!")
 
+def prepare_dic(pokemon):
+    dic = {
+        'name': pokemon.name,
+        'health': pokemon.health,
+        'moves': list()
+    }
+    for move in pokemon.moves:
+        tupla = (move.name, move.power, move.accuracy, move.power_point)
+        dic['moves'].append(tupla)
+    return dic
+
 if __name__ == "__main__":
     fire_moves = [Move("Tackle", 12.0, 100.0, 10), Move("QuickAttack", 14.0, 100.0, 7), Move("Ember", 15.0, 100.0, 7)]
     eletric_moves = [Move("Thunderbolt", 15.0, 100.0, 7), Move("QuickAttack", 14.0, 100.0, 7), Move("ThunderShock", 20.0, 100.0, 3)]
     grass_moves = [Move("Absorb", 8.0, 100.0, 10), Move("LeafBlade", 20.0, 80.0, 5), Move("Tackle", 12.0, 100.0, 10)]
     water_moves = [Move("AquaTail", 12.0, 100.0, 10), Move("Bubble", 14.0, 100.0, 7), Move("QuickAttack", 14.0, 100.0, 7)]
 
-    pikachu = Pokemon("Pikachu", 45.0, 0, 5, eletric_moves)
-    charmander = Pokemon("Charmander", 45.0, 0, 5, fire_moves)
+    pikachu = Pokemon("Pikachu", 5, eletric_moves)
+    charmander = Pokemon("Charmander", 5, fire_moves)
 
     while (charmander.health > 0 and pikachu.health > 0):
         turn(pikachu, charmander)
