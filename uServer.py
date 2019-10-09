@@ -110,22 +110,23 @@ while not finished:
                 sendAck(pkt.id_seq)
                 msg_received = True
 
-    pokemon_remote = app.convert_dic(pokemon_remote)
-    charmander, pokemon_remote = app.turn(charmander, pokemon_remote)
-    
-    if pokemon_remote.health < 0:
-        print(pokemon_remote.name + " has been defeated!")
-        print(charmander.name + " WIN!")
-        print("END GAME")
-        msg = "You lose"
+    if not finished:
+        pokemon_remote = app.convert_dic(pokemon_remote)
+        charmander, pokemon_remote = app.turn(charmander, pokemon_remote)
+        
+        if pokemon_remote.health < 0:
+            print(pokemon_remote.name + " has been defeated!")
+            print(charmander.name + " WIN!")
+            print("END GAME")
+            msg = "You lose"
+            send_msg(msg)
+            msg_received = False
+            finished = True
+
+        pokemon_local = app.prepare_dic(charmander)
+        pokemon_remote = app.prepare_dic(pokemon_remote)
+
+        msg = [pokemon_local, pokemon_remote] 
+        msg = msg.__str__()
         send_msg(msg)
         msg_received = False
-        finished = True
-
-    pokemon_local = app.prepare_dic(charmander)
-    pokemon_remote = app.prepare_dic(pokemon_remote)
-
-    msg = [pokemon_local, pokemon_remote] 
-    msg = msg.__str__()
-    send_msg(msg)
-    msg_received = False

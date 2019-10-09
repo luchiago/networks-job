@@ -132,14 +132,15 @@ while not finished:
                     pokemon_remote = eval(pkt.data)[0]
                 sendAck(pkt.id_seq)
                 msg_received = True
-    pikachu = app.convert_dic(pokemon_local)
-    pokemon_remote = app.convert_dic(pokemon_remote)
-    pikachu, pokemon_remote = app.turn(pikachu, pokemon_remote)
-    if pokemon_remote.health < 0:
-        print(pokemon_remote.name + " has been defeated!")
-        print(pikachu.name + " WIN!")
-        print("END GAME")
-        msg = "You lose"
-        send_msg(msg)
-        msg_received = False
-        finished = True
+    if not finished:
+        pikachu = app.convert_dic(pokemon_local)
+        pokemon_remote = app.convert_dic(pokemon_remote)
+        pikachu, pokemon_remote = app.turn(pikachu, pokemon_remote)
+        if pokemon_remote.health < 0:
+            print(pokemon_remote.name + " has been defeated!")
+            print(pikachu.name + " WIN!")
+            print("END GAME")
+            msg = "You lose"
+            send_msg(msg)
+            msg_received = False
+            finished = True
