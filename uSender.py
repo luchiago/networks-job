@@ -1,6 +1,7 @@
 import socket, json
 from socket import timeout
 from uPack import *
+import Application as app
 
 SEG_SIZE = 100
 prox_id = 0
@@ -9,13 +10,13 @@ dest_port = 5000
 
 send_ip = input("IP destino: ")
 my_ip = input("meu ip: ")
- 
+
 send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # ativando o listen do servdor
 recv_sock.bind((my_ip, sender_port))
 recv_sock.settimeout(2)
- 
+
 last_pkt_id = 0
 
 
@@ -113,8 +114,25 @@ def set_my_ip(ip):
     my_ip = ip  
 
 
+eletric_moves = [app.Move("Thunderbolt", 15.0, 100.0, 7), app.Move(
+    "QuickAttack", 14.0, 100.0, 7), app.Move("ThunderShock", 20.0, 100.0, 3)]
+pikachu = app.Pokemon("Pikachu", 5, eletric_moves)
+
 while True:
-    send_msg(input("Sua msg: "))
-    msg = receive()
-    print(" <<< " + str(msg.data))
     
+    pokemon_data = app.prepare_dic(pikachu)
+    send_msg(pokemon_data)
+    msg = receive()
+    pokemon_data = msg.data
+    moves = pokemon_data['moves']
+    remote_pokemon_move = []
+    for move in moves:
+        remote_pokemon_move.append(
+            app.Move(move[0], move[1], move[2], move[3]))
+    remote_pokemon = app.Pokemon(
+        pokemon_data['name'], pokemon_data['health'], remote_pokemon_move)
+    turn(pikachu, remote_pokemon)
+    if pikachu.health < 0:
+        print(pikachu.name + " has been defeated!")
+    print("END GAME")
+    break
