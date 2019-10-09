@@ -102,6 +102,8 @@ finished = False
 
 while not finished:
     msg = app.prepare_dic(pikachu)
+    if pokemon_remote is not None and pokemon_remote != "None":
+        pokemon_remote = app.prepare_dic(pokemon_remote)
     msg = [msg, pokemon_remote]
     msg = msg.__str__()
     send_msg(msg)

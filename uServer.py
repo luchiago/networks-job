@@ -140,6 +140,8 @@ while not finished:
         finished = True
 
     pokemon_data = app.prepare_dic(charmander)
+    if remote_pokemon is not None and remote_pokemon != "None":
+        remote_pokemon = app.prepare_dic(remote_pokemon)
     pokemon_data = [pokemon_data, remote_pokemon]
     pokemon_data = pokemon_data.__str__()
     send_msg(pokemon_data)
