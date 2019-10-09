@@ -6,8 +6,8 @@ import Application as app
 
 SEG_SIZE = 100
 prox_id = 0
-sender_port = 4000
-dest_port = 5000
+sender_port = 5000
+dest_port = 4000
 
 send_ip = "192.168.0.104"
 my_ip = "192.168.0.103"
